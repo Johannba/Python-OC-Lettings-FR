@@ -64,6 +64,18 @@ jobs:
             docker tag "$CIRCLE_SHA1" "$DOCKERHUB_USERNAME"/oc_lettings:"$CIRCLE_SHA1"
             docker push "$DOCKERHUB_USERNAME"/oc_lettings:"$CIRCLE_SHA1"
 
+  deploy-heroku:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Build app and send Docker IMG to Heroku
+          command: |
+            sudo curl https://cli-assets.heroku.com/install.sh | sh
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:login
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a oc-lettings-johannb web
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a oc-lettings-johannb web
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -75,6 +87,13 @@ workflows:
       - build-docker-and-push:
           requires:
             - build-and-test
+          filters:
+            branches:
+              only: master
+      - deploy-heroku:
+          requires:
+            - build-and-test
+            - build-docker-and-push
           filters:
             branches:
               only: master
