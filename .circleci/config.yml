@@ -73,7 +73,7 @@ workflows:
     jobs:
       - build-and-test
       - build-docker-and-push:
-          required:
+          requires:
             - build-and-test
           filters:
             branches:
