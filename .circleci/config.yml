@@ -51,7 +51,6 @@ jobs:
     environment:
       IMAGE_NAME: oc_lettings
     docker:
-      #- image: cimg/python@sha256:671fa6ebe57cc353e475b9e650d8a7ee2605c8b59cc9acf6f30cad6fed05df33 
       - image: circleci/buildpack-deps:stretch
         
     steps:
@@ -73,3 +72,10 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
+      - build-docker-and-push:
+          required:
+            - build-and-test
+          filters:
+            branches:
+              only: master
+
