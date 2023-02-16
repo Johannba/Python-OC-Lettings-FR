@@ -47,6 +47,24 @@ jobs:
           name: Run flake8
           command: flake8
 
+  build-docker-and-push:
+    environment:
+      IMAGE_NAME: oc_lettings
+    docker:
+      #- image: cimg/python@sha256:671fa6ebe57cc353e475b9e650d8a7ee2605c8b59cc9acf6f30cad6fed05df33 
+      - image: circleci/buildpack-deps:stretch
+        
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: build docker image
+          command: |
+            echo "$DOCKERHUB_TOKEN" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+            docker build -t "$CIRCLE_SHA1" .
+            docker tag "$CIRCLE_SHA1" "$DOCKERHUB_USERNAME"/oc_lettings:"$CIRCLE_SHA1"
+            docker push "$DOCKERHUB_USERNAME"/oc_lettings:"$CIRCLE_SHA1"
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
