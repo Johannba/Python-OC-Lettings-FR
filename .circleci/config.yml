@@ -29,6 +29,12 @@ jobs:
     # CircleCI will report the results back to your VCS provider.
     steps:
       - checkout
+      - run:
+          name: create venv and install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
       - python/install-packages:
           pkg-manager: pip
           # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
@@ -37,6 +43,10 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: pytest
+      - run:
+          name: Run flake8
+          command: flake8
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
