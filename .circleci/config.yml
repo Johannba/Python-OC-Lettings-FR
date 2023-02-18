@@ -72,9 +72,9 @@ jobs:
           name: Build app and send Docker IMG to Heroku
           command: |
             sudo curl https://cli-assets.heroku.com/install.sh | sh
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:login
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a oc-lettings-johannb web
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a oc-lettings-johannb web
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:push -a oc-lettings-johannb web
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release -a oc-lettings-johannb web
 
 
 # Invoke jobs via workflows
