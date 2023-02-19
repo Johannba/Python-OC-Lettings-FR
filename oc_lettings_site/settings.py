@@ -118,7 +118,7 @@ STATIC_URL = "/static/"
 
 
 sentry_sdk.init(
-    dsn=env("SENTRY_SDK"),
+    dsn= os.environ.get("SENTRY_SDK", default="sentry_sdk"),
     integrations=[
         DjangoIntegration(),
     ],
